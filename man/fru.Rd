@@ -24,11 +24,13 @@ Integer decision will be silently converted into a real vector and treated as su
 NA values are not accepted.}
 
 \item{trees}{Number of trees to grow, a single number larger than zero.
-Also called \code{ntree} in other software.}
+Also called \code{ntree} in other software.
+500 by default, in principle should be set to be big enough to stabilise the outputs of the forest, either prediction accuracy or importance; generally, bigger sets will need more trees, and it is unlikely that overshooting ensemble size will hurt the model in a statistically significant way.}
 
 \item{tries}{Number of features to try at each split, a single number larger than zero and not larger than the number of columns in \code{x}.
 Also called \code{mtry} in other software.
-By default, set to the rounded square root of the number of features.}
+By default, set to the rounded square root of the number of features.
+It is unlikely this needs tweaking; increasing this value leads to a more accurate decision trees, but in turn makes them more correlated, spoiling the ensemble effect.}
 
 \item{forest}{If set to \code{TRUE}, the forest object is returned and can be used for prediction.}
 
@@ -77,5 +79,6 @@ fru(iris[,-5],iris[,5],threads=2)
 }
 \references{
 Breiman L. (2001). \emph{Random Forests}, Machine Learning 45, 5-32.
+
 O'Neil Melissa E. (2014). \emph{PCG: A Family of Simple Fast Space-Efficient Statistically Good Algorithms for Random Number Generation}, HMC-CS-2014-0905.
 }

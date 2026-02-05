@@ -78,7 +78,7 @@ SEXP C_predict(SEXP sModel,SEXP sAttributes,SEXP sVotes,SEXP sThreads){
     if(get_votes) n_ans=n_ans*tag[0];
     sPrediction=PROTECT(Rf_allocVector(INTSXP,n_ans));
     ip=INTEGER(sPrediction);
-    for(int e=0;e<n_ans;e++) ip[e]=NA_REAL;
+    for(int e=0;e<n_ans;e++) ip[e]=NA_INTEGER;
   }
   if(mp==0){
     //OOB
@@ -161,7 +161,7 @@ SEXP C_fru(SEXP sAttributes,SEXP sDecision,SEXP sNtree,SEXP sMtry,SEXP sImportan
       for(int e=0;e<n;e++)
         if(!R_FINITE(yreg[e])) Rf_error("Only finite values allowed in decision");
       break;
-    case LGLSXP:
+    case LGLSXP:;
       int *v=INTEGER(sDecision);
       classes=2;
       ycls=(int*)R_alloc(sizeof(int),n);
@@ -170,7 +170,7 @@ SEXP C_fru(SEXP sAttributes,SEXP sDecision,SEXP sNtree,SEXP sMtry,SEXP sImportan
         ycls[e]=v[e]?2:1;
       }
       break;
-    case INTSXP:
+    case INTSXP:;
       int nc=Rf_length(Rf_getAttrib(sDecision,R_LevelsSymbol));
       if(Rf_isOrdered(sDecision)) nc=0;
       if(nc==0){
@@ -178,7 +178,7 @@ SEXP C_fru(SEXP sAttributes,SEXP sDecision,SEXP sNtree,SEXP sMtry,SEXP sImportan
         yreg=(double*)R_alloc(sizeof(double),n);
         int *yri=INTEGER(sDecision);
         for(int e=0;e<n;e++){
-          if(yri[e]!=NA_INTEGER) Rf_error("NAs not allowed in decision");
+          if(yri[e]==NA_INTEGER) Rf_error("NAs not allowed in decision");
           yreg[e]=(double)yri[e];
         }
       }else{

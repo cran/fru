@@ -10,7 +10,7 @@ solidify(x)
 \item{x}{The fru model object.}
 }
 \value{
-Invisibly, the same object as \code{x}, yet internally modified so that it can be serialised.
+Invisibly, the same object as \code{x}; the function is called for the side effect of modifying the object.
 }
 \description{
 Forces a model to be solidified, so that it would survive through saving into RDS or sending over a network, etc.

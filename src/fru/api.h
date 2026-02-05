@@ -1,6 +1,10 @@
 #include <stdint.h>
 #include <stddef.h>
 
+#if __STDC_VERSION__ < 202311l
+#include <stdbool.h>
+#endif
+
 #ifdef __cplusplus
 extern "C" {
 #endif

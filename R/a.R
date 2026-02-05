@@ -31,9 +31,11 @@ NULL
 #'  NA values are not accepted.
 #' @param trees Number of trees to grow, a single number larger than zero.
 #'  Also called \code{ntree} in other software.
+#'  500 by default, in principle should be set to be big enough to stabilise the outputs of the forest, either prediction accuracy or importance; generally, bigger sets will need more trees, and it is unlikely that overshooting ensemble size will hurt the model in a statistically significant way.
 #' @param tries Number of features to try at each split, a single number larger than zero and not larger than the number of columns in \code{x}.
 #'  Also called \code{mtry} in other software.
 #'  By default, set to the rounded square root of the number of features.
+#'  It is unlikely this needs tweaking; increasing this value leads to a more accurate decision trees, but in turn makes them more correlated, spoiling the ensemble effect.
 #' @param importance If set to \code{TRUE}, importance scores will be calculated.
 #' @param oob If set to \code{TRUE}, out-of-bag (OOB) predictions will be calculated.
 #' @param forest If set to \code{TRUE}, the forest object is returned and can be used for prediction.
@@ -44,6 +46,7 @@ NULL
 #' @returns The fitted model, an object of a class \code{fru}.
 #' @references
 #' Breiman L. (2001). \emph{Random Forests}, Machine Learning 45, 5-32.
+#' @references 
 #' O'Neil Melissa E. (2014). \emph{PCG: A Family of Simple Fast Space-Efficient Statistically Good Algorithms for Random Number Generation}, HMC-CS-2014-0905.
 #' @examples
 #' set.seed(1)
@@ -84,7 +87,7 @@ fru<-function(
 #' The function converts the object in-place, thanks to the semantics of external pointers.
 #' No-op when given an object that is already serialised, either by \code{solidify=TRUE} flag passed to \code{fru}, due to a previous call to \code{solidify} or when deserialised.
 #' @param x The fru model object.
-#' @returns Invisibly, the same object as \code{x}, yet internally modified so that it can be serialised.
+#' @returns Invisibly, the same object as \code{x}; the function is called for the side effect of modifying the object.
 #' @export
 solidify<-function(x){
   stopifnot(inherits(x,"fru"))
