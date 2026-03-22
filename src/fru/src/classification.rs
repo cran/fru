@@ -1,5 +1,8 @@
 use super::attribute::FYSampler;
+use crate::ORDER_CACHE_THRESHOLD;
 use crate::attribute::{DfAttribute, DfPivot, SplittingIterator};
+use crate::tools::ordering_vector;
+use std::{cell::OnceCell, iter, sync::OnceLock};
 use xrf::{Mask, RfInput, RfRng, VoteAggregator};
 
 mod da;
@@ -9,6 +12,7 @@ pub use votes::Votes;
 
 pub struct DataFrame {
     features: Vec<DfAttribute>,
+    order_cache: Vec<OnceLock<Vec<u32>>>,
     decision: Vec<u32>,
     ncat: u32,
     m: usize,
@@ -44,9 +48,32 @@ impl RfInput for DataFrame {
     ) -> Option<(Self::Pivot, f64)> {
         use DfAttribute::*;
         let feature = &self.features[using as usize];
+
         match *feature {
-            Numeric(x) => impurity::scan_f64(x, y, on),
-            Integer(x) => impurity::scan_i32(x, y, on),
+            Numeric(x) => {
+                if on.len() > ORDER_CACHE_THRESHOLD {
+                    impurity::scan_f64_cached(
+                        x,
+                        y,
+                        on,
+                        self.order_cache[using as usize].get_or_init(|| ordering_vector(x, self.n)),
+                    )
+                } else {
+                    impurity::scan_f64(x, y, on)
+                }
+            }
+            Integer(x) => {
+                if on.len() > ORDER_CACHE_THRESHOLD {
+                    impurity::scan_i32_cached(
+                        x,
+                        y,
+                        on,
+                        self.order_cache[using as usize].get_or_init(|| ordering_vector(x, self.n)),
+                    )
+                } else {
+                    impurity::scan_i32(x, y, on)
+                }
+            }
             Logical(x) => impurity::scan_bin(x, y, on),
             Factor(xc, x) => impurity::scan_factor(x, xc, y, on, rng),
         }
@@ -64,6 +91,7 @@ impl RfInput for DataFrame {
 
 pub struct DecisionSlice {
     values: Vec<u32>,
+    multiplicities: OnceCell<Vec<u32>>,
     ncat: u32,
     summary: Votes,
 }
@@ -77,9 +105,19 @@ impl DecisionSlice {
             .collect();
         DecisionSlice {
             values,
+            multiplicities: OnceCell::new(),
             ncat,
             summary,
         }
+    }
+    fn provide_mult(&self, mask: &Mask, n: u32) -> &[u32] {
+        self.multiplicities.get_or_init(|| {
+            let mut ans = vec![0; n as usize];
+            for e in mask.iter() {
+                ans[*e] += 1;
+            }
+            ans
+        })
     }
 }
 
@@ -107,6 +145,7 @@ impl DataFrame {
     ) -> Self {
         Self {
             features,
+            order_cache: iter::repeat_with(|| OnceLock::new()).take(m).collect(),
             decision,
             ncat,
             m,

@@ -14,7 +14,10 @@ use regression::DataFrame as DataFrameRegression;
 mod packed;
 use packed::{Packable, PackedForest};
 
+pub mod tools;
+
 pub const MAX_FACTOR_LEVELS: u32 = 5;
+pub const ORDER_CACHE_THRESHOLD: usize = 64;
 
 #[unsafe(no_mangle)]
 pub unsafe extern "C" fn xrf_cls(

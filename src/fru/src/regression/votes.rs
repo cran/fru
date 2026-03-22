@@ -25,7 +25,7 @@ impl Votes {
                     *vals.add(7),
                 ]
             }),
-            n: usize::from_le_bytes(unsafe {
+            n: u64::from_le_bytes(unsafe {
                 [
                     *vals.add(8),
                     *vals.add(8 + 1),
@@ -36,14 +36,16 @@ impl Votes {
                     *vals.add(8 + 6),
                     *vals.add(8 + 7),
                 ]
-            }),
+            })
+            .try_into()
+            .unwrap(),
         }
     }
     pub unsafe fn into_raw(&self, vals: *mut u8) {
         self.sum
             .to_le_bytes()
             .iter()
-            .chain(self.n.to_le_bytes().iter())
+            .chain((self.n as u64).to_le_bytes().iter())
             .enumerate()
             .for_each(|(e, &v)| {
                 unsafe { *vals.add(e) = v };

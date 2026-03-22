@@ -260,6 +260,7 @@ fru_info<-function(x){
 #' @export
 extract_forest<-function(x){
   .Call(C_extract_forest,solidify(x)$model)->ans
+  if(is.null(ans[[2]])) stop("Forest was not saved")
   ans[2:4]->ans
   data.frame(ans)->ans
   names(ans)<-c("Flag","Feature","Value")

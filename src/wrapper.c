@@ -8,7 +8,7 @@
 
 void finalise_forest(SEXP sModel){
   void *model=R_ExternalPtrAddr(sModel);
-  if(!model) finalise_xrf(model);
+  if(model) finalise_xrf(model);
 }
 
 void* try_deserialise(SEXP sModel){

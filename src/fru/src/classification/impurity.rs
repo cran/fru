@@ -1,5 +1,6 @@
 use super::{DecisionSlice, Votes};
 use crate::attribute::DfPivot;
+use crate::tools::midpoint;
 use xrf::{Mask, RfRng, VoteAggregator};
 
 pub fn scan_bin(x: *const u32, ys: &DecisionSlice, mask: &Mask) -> Option<(DfPivot, f64)> {
@@ -101,38 +102,28 @@ pub fn scan_f64(x: *const f64, ys: &DecisionSlice, mask: &Mask) -> Option<(DfPiv
         })
         .collect();
     bound.sort_unstable_by(|a, b| a.0.total_cmp(&b.0));
-
-    let n = bound.len();
-    let mut left = Votes::new(ys.ncat);
-    let mut scanned = 0_usize;
-    bound
-        .windows(2)
-        .map(|x| (x[0].0, x[1].0, x[0].1))
-        .fold(None, |acc: Option<(f64, f64)>, (x, next_x, y)| {
-            scanned += 1;
-            left.ingest_vote(y);
-            if x.total_cmp(&next_x).is_ne() {
-                let score: f64 = ys
-                    .summary
-                    .0
-                    .iter()
-                    .zip(left.0.iter())
-                    .map(|(&all, &left)| {
-                        let ahead = (n - scanned) as f64;
-                        let scanned = scanned as f64;
-                        let n = n as f64;
-                        let right = (all - left) as f64;
-                        let left = left as f64;
-                        (left / scanned) * (left / n) + (right / ahead) * (right / n)
-                    })
-                    .sum();
-                if score > acc.map(|x| x.1).unwrap_or(f64::NEG_INFINITY) {
-                    return Some((0.5 * (x + next_x), score));
-                }
-            }
-            acc
-        })
+    scan_ordered(bound.into_iter(), ys, |a, b| (a + b) / 2.)
         .map(|(thresh, score)| (DfPivot::Real(thresh), score))
+}
+
+pub fn scan_f64_cached(
+    x: *const f64,
+    ys: &DecisionSlice,
+    mask: &Mask,
+    order: &[u32],
+) -> Option<(DfPivot, f64)> {
+    let yo = ys.provide_mult(mask, order.len() as u32);
+    scan_ordered(
+        order
+            .iter()
+            .flat_map(|e| {
+                std::iter::repeat_n(unsafe { *x.add(*e as usize) }, yo[*e as usize] as usize)
+            })
+            .zip(ys.values.iter().copied()),
+        ys,
+        |a, b| (a + b) / 2.,
+    )
+    .map(|(thresh, score)| (DfPivot::Real(thresh), score))
 }
 
 pub fn scan_i32(x: *const i32, ys: &DecisionSlice, mask: &Mask) -> Option<(DfPivot, f64)> {
@@ -145,36 +136,68 @@ pub fn scan_i32(x: *const i32, ys: &DecisionSlice, mask: &Mask) -> Option<(DfPiv
         })
         .collect();
     bound.sort_unstable_by(|a, b| a.0.cmp(&b.0));
+    scan_ordered(bound.into_iter(), ys, midpoint)
+        .map(|(thresh, score)| (DfPivot::Integer(thresh), score))
+}
 
-    let n = bound.len();
+pub fn scan_i32_cached(
+    x: *const i32,
+    ys: &DecisionSlice,
+    mask: &Mask,
+    order: &[u32],
+) -> Option<(DfPivot, f64)> {
+    let yo = ys.provide_mult(mask, order.len() as u32);
+    scan_ordered(
+        order
+            .iter()
+            .flat_map(|e| {
+                std::iter::repeat_n(unsafe { *x.add(*e as usize) }, yo[*e as usize] as usize)
+            })
+            .zip(ys.values.iter().copied()),
+        ys,
+        midpoint,
+    )
+    .map(|(thresh, score)| (DfPivot::Integer(thresh), score))
+}
+
+#[inline(always)]
+fn scan_ordered<T: Copy + PartialOrd + Default, I: Iterator<Item = (T, u32)>, M: Fn(T, T) -> T>(
+    iter: I,
+    ys: &DecisionSlice,
+    midpoint: M,
+) -> Option<(T, f64)> {
+    let n = ys.values.len();
     let mut left = Votes::new(ys.ncat);
     let mut scanned = 0_usize;
-    bound
-        .windows(2)
-        .map(|x| (x[0].0, x[1].0, x[0].1))
-        .fold(None, |acc: Option<(i32, f64)>, (x, next_x, y)| {
-            scanned += 1;
-            left.ingest_vote(y);
-            if x.cmp(&next_x).is_ne() {
-                let score: f64 = ys
-                    .summary
-                    .0
-                    .iter()
-                    .zip(left.0.iter())
-                    .map(|(&all, &left)| {
-                        let ahead = (n - scanned) as f64;
-                        let scanned = scanned as f64;
-                        let n = n as f64;
-                        let right = (all - left) as f64;
-                        let left = left as f64;
-                        (left / scanned) * (left / n) + (right / ahead) * (right / n)
-                    })
-                    .sum();
-                if score > acc.map(|x| x.1).unwrap_or(f64::NEG_INFINITY) {
-                    return Some((x, score));
-                }
+    iter.scan((T::default(), 0), |last, cur| {
+        let ans = (last.0, cur.0, last.1);
+        last.0 = cur.0;
+        last.1 = cur.1;
+        Some(ans)
+    })
+    .skip(1)
+    .fold(None, |acc: Option<(T, f64)>, (x, next_x, y)| {
+        scanned += 1;
+        left.ingest_vote(y);
+        if x.partial_cmp(&next_x).unwrap().is_ne() {
+            let score: f64 = ys
+                .summary
+                .0
+                .iter()
+                .zip(left.0.iter())
+                .map(|(&all, &left)| {
+                    let ahead = (n - scanned) as f64;
+                    let scanned = scanned as f64;
+                    let n = n as f64;
+                    let right = (all - left) as f64;
+                    let left = left as f64;
+                    (left / scanned) * (left / n) + (right / ahead) * (right / n)
+                })
+                .sum();
+            if score > acc.map(|x| x.1).unwrap_or(f64::NEG_INFINITY) {
+                return Some((midpoint(x, next_x), score));
             }
-            acc
-        })
-        .map(|(thresh, score)| (DfPivot::Integer(thresh), score))
+        }
+        acc
+    })
 }

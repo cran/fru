@@ -1,0 +1,10 @@
+Changes in 0.0.4:
+	- Memory leak fixed; thanks to Tony Auckland for spotting.
+	- Fixed regression on integer decisions.
+	- Integer midpoint between a & b is now floor((a+b)/2)
+	rather than min(a,b).
+	- Improved error reporting with extract_forest().
+	- Order caching for faster training on long numeric features.
+
+Changes in 0.0.3:
+	- First public release.
