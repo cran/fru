@@ -11,6 +11,6 @@ dependencies = [
 
 [[package]]
 name = "xrf"
-version = "0.1.3"
+version = "0.1.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "3b8636fd378ee29f70f5e346fd3faa36337752ecc92636aefb12d6868a57a409"
+checksum = "e99ffe8abae1cc7dc25905103ff0b0303b64fb395ff6d126a00332b947767774"

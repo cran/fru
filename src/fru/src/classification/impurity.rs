@@ -54,7 +54,11 @@ pub fn scan_factor(
     mask.iter()
         .map(|&e| unsafe { *x.add(e) - 1 })
         .zip(ys.values.iter())
-        .for_each(|(x, &y)| va[x as usize].ingest_vote(y));
+        .for_each(|(x, &y)| {
+            va.get_mut(x as usize)
+                .expect("Invalid value or NA in a factor feature")
+                .ingest_vote(y)
+        });
     let sub_max: u64 = (1 << (xc - 1)) - 1;
 
     (0..sub_max)
@@ -106,26 +110,6 @@ pub fn scan_f64(x: *const f64, ys: &DecisionSlice, mask: &Mask) -> Option<(DfPiv
         .map(|(thresh, score)| (DfPivot::Real(thresh), score))
 }
 
-pub fn scan_f64_cached(
-    x: *const f64,
-    ys: &DecisionSlice,
-    mask: &Mask,
-    order: &[u32],
-) -> Option<(DfPivot, f64)> {
-    let yo = ys.provide_mult(mask, order.len() as u32);
-    scan_ordered(
-        order
-            .iter()
-            .flat_map(|e| {
-                std::iter::repeat_n(unsafe { *x.add(*e as usize) }, yo[*e as usize] as usize)
-            })
-            .zip(ys.values.iter().copied()),
-        ys,
-        |a, b| (a + b) / 2.,
-    )
-    .map(|(thresh, score)| (DfPivot::Real(thresh), score))
-}
-
 pub fn scan_i32(x: *const i32, ys: &DecisionSlice, mask: &Mask) -> Option<(DfPivot, f64)> {
     let mut bound: Vec<(i32, u32)> = mask
         .iter()
@@ -138,26 +122,6 @@ pub fn scan_i32(x: *const i32, ys: &DecisionSlice, mask: &Mask) -> Option<(DfPiv
     bound.sort_unstable_by(|a, b| a.0.cmp(&b.0));
     scan_ordered(bound.into_iter(), ys, midpoint)
         .map(|(thresh, score)| (DfPivot::Integer(thresh), score))
-}
-
-pub fn scan_i32_cached(
-    x: *const i32,
-    ys: &DecisionSlice,
-    mask: &Mask,
-    order: &[u32],
-) -> Option<(DfPivot, f64)> {
-    let yo = ys.provide_mult(mask, order.len() as u32);
-    scan_ordered(
-        order
-            .iter()
-            .flat_map(|e| {
-                std::iter::repeat_n(unsafe { *x.add(*e as usize) }, yo[*e as usize] as usize)
-            })
-            .zip(ys.values.iter().copied()),
-        ys,
-        midpoint,
-    )
-    .map(|(thresh, score)| (DfPivot::Integer(thresh), score))
 }
 
 #[inline(always)]

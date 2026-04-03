@@ -2,6 +2,7 @@ use std::marker::PhantomData;
 use xrf::{FeatureSampler, RfInput, RfRng};
 
 #[derive(Debug, Clone)]
+#[cfg_attr(test, derive(PartialEq))]
 pub enum DfPivot {
     Logical,
     Real(f64),
