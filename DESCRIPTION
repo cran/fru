@@ -1,6 +1,6 @@
 Package: fru
 Title: A Blazing Fast Implementation of Random Forest
-Version: 0.0.5
+Version: 0.0.6
 Authors@R: c(
 	  person(
 	   c("Miron","Bartosz"),"Kursa",role=c("aut","cre"),email="m@mbq.me",comment=c(ORCID="0000-0001-7672-648X")
@@ -19,11 +19,11 @@ License: GPL-3
 Encoding: UTF-8
 RoxygenNote: 7.3.3
 NeedsCompilation: yes
-Packaged: 2026-04-02 21:40:46 UTC; mbq
+Packaged: 2026-04-24 10:35:19 UTC; mbq
 Author: Miron Bartosz Kursa [aut, cre] (ORCID:
     <https://orcid.org/0000-0001-7672-648X>),
   Krzysztof Piotr Piwoński [aut] (ORCID:
     <https://orcid.org/0000-0002-0977-5959>)
 Maintainer: Miron Bartosz Kursa <m@mbq.me>
 Repository: CRAN
-Date/Publication: 2026-04-03 11:20:02 UTC
+Date/Publication: 2026-04-24 11:40:02 UTC

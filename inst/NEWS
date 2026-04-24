@@ -1,3 +1,7 @@
+Changes in 0.0.6:
+	- Fixed importance score calculation in multi-threaded
+	case.
+
 Changes in 0.0.5:
 	- Better reporting of NA values in factor features.
 	- Order cache removed as it was both incorrect and not

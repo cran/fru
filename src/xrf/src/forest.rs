@@ -209,10 +209,10 @@ impl<I: RfInput> Forest<I> {
                     .take()
                     .zip(other.importance.take())
                     .map(|(mut a, b)| {
-                        a.iter_mut().for_each(|(feature, aggregator)| {
-                            if let Some(other) = b.get(feature) {
-                                aggregator.merge(other);
-                            }
+                        b.into_iter().for_each(|(feature, aggregator)| {
+                            a.entry(feature)
+                                .and_modify(|x| x.merge(&aggregator))
+                                .or_insert_with(|| aggregator);
                         });
                         a
                     });

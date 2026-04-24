@@ -1,9 +1,9 @@
-02845b3f2a3cd968b390a44e1cc0479c *DESCRIPTION
+b4b7c0223780e78c88a25a302c93b7c4 *DESCRIPTION
 f86bb231999e5a29a33d59ba12be4cdf *NAMESPACE
 e40a6520b845b28e4ae1464f0904e780 *R/a.R
 01fcc64eda90f8350eee0f28c7a57959 *configure
 01fcc64eda90f8350eee0f28c7a57959 *configure.win
-e36b03e7665290b156df388f6afda0f4 *inst/NEWS
+5f29bb2db590ecedb421187ca10d9f51 *inst/NEWS
 10f8e77d9bf6d8cc3ff5f9f368903a28 *man/extract_forest.Rd
 ca7c8882453792345e30b79bf2da9b00 *man/fru.Rd
 0323efafb4ac97f58ad52bfa6e3fdcb3 *man/importance.Rd
@@ -12,7 +12,7 @@ a2111d15c27d66e8876da650dca6041e *man/print.fru.Rd
 f8bae5020cb1b984622370a290e6c650 *man/solidify.Rd
 74cf0a7f8480fb9e1f4840e2d13e8f7f *src/Makevars
 8079be4af269a3735c139c70ec64baff *src/Makevars.win
-59b9bb501e24bb2691d7fbde2b3e43b5 *src/fru/Cargo.lock
+8fa0ebc776415ded67e583ab167b0f27 *src/fru/Cargo.lock
 a735a26d3ddb5602d4cee086833c11d9 *src/fru/Cargo.toml
 ce0c0f1d39345c7503717e28f83c315a *src/fru/api.h
 38a492661757b50f545549f19e9d20be *src/fru/src/attribute.rs
@@ -27,12 +27,13 @@ a96c8f35d31e3446f88d060b186386b1 *src/fru/src/regression/da.rs
 ed8339ae22b97ddbe4c2274c3fd053eb *src/fru/src/regression/impurity.rs
 5100d167dc8358ac29fbb6a98ca0211d *src/fru/src/regression/votes.rs
 671b18bd5c59f2c04a0e7225cd6664c2 *src/fru/src/tools.rs
+446b48251752741d6c3a4b84ac83f03e *src/fru/vendor.tar.xz
 2d6dc432fc0b4630f94fdd223b5691c4 *src/wrapper.c
-5fba440c2705f8ddbc117362edcef0fc *src/xrf/Cargo.lock
-4f5d810bb6e0ab30fd5d727b260e2504 *src/xrf/Cargo.toml
+586e39472850cf849542db1cbe90dd7a *src/xrf/Cargo.lock
+9d7d42885cc915563b3de82663a86632 *src/xrf/Cargo.toml
 adcd8cc17b72ab4d69fdd81c08d00ce8 *src/xrf/src/error.rs
 1545b9b1a157979336078a1e03a161db *src/xrf/src/fair_best.rs
-c5cb8770dc5bfb215d1beeab0fdee81c *src/xrf/src/forest.rs
+b327eac2f323311b2dd695d245666f97 *src/xrf/src/forest.rs
 8b11bb0baa889d26d09b0c9298c34cd7 *src/xrf/src/forest/importance.rs
 95014aa7c10cab5f48cebe61e0cfac54 *src/xrf/src/forest/importance_aggregator.rs
 cbae39fb7c5eadc52d94978626dd852b *src/xrf/src/forest/maybe_vec.rs
