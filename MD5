@@ -1,9 +1,9 @@
-b4b7c0223780e78c88a25a302c93b7c4 *DESCRIPTION
+96c61bddf1e0ec0c8da000a6219a412a *DESCRIPTION
 f86bb231999e5a29a33d59ba12be4cdf *NAMESPACE
 e40a6520b845b28e4ae1464f0904e780 *R/a.R
 01fcc64eda90f8350eee0f28c7a57959 *configure
 01fcc64eda90f8350eee0f28c7a57959 *configure.win
-5f29bb2db590ecedb421187ca10d9f51 *inst/NEWS
+162f308947cc1ed8ddebfa9498a154e7 *inst/NEWS
 10f8e77d9bf6d8cc3ff5f9f368903a28 *man/extract_forest.Rd
 ca7c8882453792345e30b79bf2da9b00 *man/fru.Rd
 0323efafb4ac97f58ad52bfa6e3fdcb3 *man/importance.Rd
@@ -27,10 +27,9 @@ a96c8f35d31e3446f88d060b186386b1 *src/fru/src/regression/da.rs
 ed8339ae22b97ddbe4c2274c3fd053eb *src/fru/src/regression/impurity.rs
 5100d167dc8358ac29fbb6a98ca0211d *src/fru/src/regression/votes.rs
 671b18bd5c59f2c04a0e7225cd6664c2 *src/fru/src/tools.rs
-446b48251752741d6c3a4b84ac83f03e *src/fru/vendor.tar.xz
 2d6dc432fc0b4630f94fdd223b5691c4 *src/wrapper.c
-586e39472850cf849542db1cbe90dd7a *src/xrf/Cargo.lock
-9d7d42885cc915563b3de82663a86632 *src/xrf/Cargo.toml
+2b2b11280b8e5cfb67eb538a6778d767 *src/xrf/Cargo.lock
+63b1176924062a6c3bcab0b673dccbaa *src/xrf/Cargo.toml
 adcd8cc17b72ab4d69fdd81c08d00ce8 *src/xrf/src/error.rs
 1545b9b1a157979336078a1e03a161db *src/xrf/src/fair_best.rs
 b327eac2f323311b2dd695d245666f97 *src/xrf/src/forest.rs
@@ -47,6 +46,6 @@ c108055437bd2e3747e2f7e7b0407919 *src/xrf/src/forest/prediction.rs
 3fa524392ab5d3b86b5e9913230520fa *src/xrf/src/mockups/iris.rs
 00843514212a6b249e3f3011ecb4532a *src/xrf/src/mockups/simple_cls.rs
 93d81a7e6a165025aa58e271afe962a9 *src/xrf/src/rfinput.rs
-77da037c6f62b0ee597775b46c3a9733 *src/xrf/src/rng.rs
+9c6da8336c6f48212a9e3132f35a7e62 *src/xrf/src/rng.rs
 16a830ac1e7d14999994e12c01ea5af9 *src/xrf/src/walk.rs
 ff88089f8124e19f05e7a5b6c21ed28c *tests/cran.R

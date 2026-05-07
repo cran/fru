@@ -1,6 +1,7 @@
 /// Built-in pseudo-random generator
 ///
 /// It is a 64 bit PCG generator.
+/// Note that it support 32 and 64 bit systems only.
 pub struct RfRng {
     state: u64,
     hop: u64,
@@ -19,7 +20,7 @@ impl RfRng {
     }
     /// Get a random u64
     pub fn get_u64(&mut self) -> u64 {
-        (self.get_u32() as u64).unbounded_shl(32) + self.get_u32() as u64
+        ((self.get_u32() as u64) << 32) + (self.get_u32() as u64)
     }
     /// Get an integer value from [0;up_to)
     pub fn up_to(&mut self, up_to: usize) -> usize {
@@ -32,8 +33,9 @@ impl RfRng {
             let thresh = up_to.wrapping_neg() % up_to;
             loop {
                 let mut p = self.get_u32() as usize;
-                if up_to > 4_294_967_296 {
-                    p = p.unbounded_shl(32);
+                use std::mem::size_of;
+                if size_of::<usize>() == 64 && up_to > u32::MAX as usize {
+                    p = p << 32;
                     p += self.get_u32() as usize;
                 }
                 //rejection method:
