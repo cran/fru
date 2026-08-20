@@ -1,3 +1,12 @@
+//! Xrf is a generic implementation of the [Random Forest](https://en.wikipedia.org/wiki/Random_forest) method.
+//! It is based on the bring your own input interface approach, i.e. it can grow an RF model on anything
+//! that implements the RfInput trait defined in this crate.
+//! It also features prediction, OOB approximations and permutation importance, implemented through an original, optimised algorithm.
+//!
+//! For more details, please refer to the [paper](https://doi.org/10.1016/j.softx.2026.102918); please cite if you use xrf in your own scientific endeavors.
+//!
+//! If you just need an RF or need some realistic implementation examples, refer to the [fru-arrow project](https://github.com/kpiwonski/fru-arrow) or [fru](https://gitlab.com/mbq/fru) package for R.
+
 mod mask;
 pub use mask::{Mask, MaskCache};
 

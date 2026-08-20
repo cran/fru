@@ -4,13 +4,13 @@ version = 4
 
 [[package]]
 name = "fru"
-version = "0.1.0"
+version = "1.0.0"
 dependencies = [
  "xrf",
 ]
 
 [[package]]
 name = "xrf"
-version = "0.1.5"
+version = "1.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ec6f4b77552a76b05502e367f718d05fa0776c5cd73a04abcacb7ef97814a98b"
+checksum = "ae73d6da2a900a6af5aca3a1db8086cdc6da25b652b4de08a6c84e2a55beaba3"

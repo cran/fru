@@ -1,6 +1,6 @@
 [package]
 name = "fru"
-version = "0.1.0"
+version = "1.0.0"
 authors = ["Miron B. Kursa <m@mbq.me>"]
 edition = "2024"
 

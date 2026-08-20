@@ -78,7 +78,9 @@ data(iris)
 fru(iris[,-5],iris[,5],threads=2)
 }
 \references{
-Breiman L. (2001). \emph{Random Forests}, Machine Learning 45, 5-32.
+Kursa Miron B., Piwoński Krzysztof P. (2026). \emph{fru: Fast random forest implementation}, SoftwareX 35, 102918.
+
+Breiman Leo (2001). \emph{Random Forests}, Machine Learning 45, 5-32.
 
 O'Neil Melissa E. (2014). \emph{PCG: A Family of Simple Fast Space-Efficient Statistically Good Algorithms for Random Number Generation}, HMC-CS-2014-0905.
 }

@@ -1,3 +1,7 @@
+Changes in 1.0.0:
+	- Links to publication in SoftwareX. Functionally,
+	this release is the same as 0.0.7.
+
 Changes in 0.0.7:
 	- Ensured compatibility with Rust 1.85.
 
